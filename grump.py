@@ -22,7 +22,7 @@ e.g
 
 """
 
-# FIXME it would be nice to see all attributes in one [;ace
+# FIXME it would be nice to see all attributes in one place
 
 class Grump:
     # Note: using context manager as a class to ensure the file handle is closed at the end
