@@ -133,6 +133,7 @@ def get_params() -> argparse.ArgumentParser:
     )
     parser.add_argument('string',
         action='store',
+        metavar='regex',
         nargs='+',
         help='the string or regular expression to match against'
     )

@@ -1,0 +1,25 @@
+P1 contains
+amy and fred
+
+P2 contains amy
+and fred
+on different lines
+
+P3 contains
+fred and amy
+in a different order
+
+P4 is followed
+by a nonempty
+whitespace only line
+    
+P5 is preceded
+by a nonempty
+whitespace only line
+
+P6 contains
+Amy and Fred
+in capitals
+
+P7 contains
+amystery and alfred
