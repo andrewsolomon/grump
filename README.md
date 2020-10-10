@@ -74,7 +74,8 @@ with grump.Grump(
 Fork the repository, make some changes, update `tests.py` then run:
 
 ```
-pip install flake8
-flake8 grump.py
+pip install black
+black grump.py
+black tests.py
 ```
 and if it passes, make a pull request.
