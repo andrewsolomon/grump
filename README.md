@@ -68,3 +68,13 @@ with grump.Grump(
     ) as matches:
 
 ```
+
+## Contributing
+
+Fork the repository, make some changes, update `tests.py` then run:
+
+```
+pip install flake8
+flake8 grump.py
+```
+and if it passes, make a pull request.

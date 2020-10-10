@@ -9,24 +9,14 @@ import re
 import sys
 
 
-
-"""
-grump = Grep for unstructured multiline paragraphs
-
-For each paragraph, see if all of the strings match.
-if they do, print it out with matches highlighted.
-
-e.g
-
-    grump --file /tmp/data 'fo*' bar
-
-"""
-
-# FIXME it would be nice to see all attributes in one place
-
 class Grump:
-    # Note: using context manager as a class to ensure the file handle is closed at the end
-    # https://book.pythontips.com/en/latest/context_managers.html
+
+    """
+    Note: using context manager as a class to ensure the file handle is
+    closed at the end
+    https://book.pythontips.com/en/latest/context_managers.html
+    """
+
     def __enter__(self):
         return self
 
@@ -37,15 +27,20 @@ class Grump:
             print(f'exc_traceback: {exc_traceback}')
         self.f.close()
 
-    def __init__ (self, fname, strings, case_sensitive=False,word=False):
-        # latin-1 so it doesn't die while reading the file...
-        # http://python-notes.curiousefficiency.org/en/latest/python3/text_file_processing.html#files-in-an-ascii-compatible-encoding-best-effort-is-acceptable
+    def __init__(self, fname, strings, case_sensitive=False, word=False):
+        """
+        latin-1 so it doesn't die while reading the file...
+        http://python-notes.curiousefficiency.org/en/latest/python3/text_file_processing.html#files-in-an-ascii-compatible-encoding-best-effort-is-acceptable
+        """
 
         try:
             if fname is None:
-                #self.f = sys.stdin # Chokes on funny characters
-                #self.f = open(1, 'r', encoding='latin-1') # Ignores piped text  e.g cat foo | grump bar
-                self.f = io.open(sys.stdin.fileno(),'r',encoding='latin-1')
+                """
+                self.f = sys.stdin # Chokes on funny characters
+                self.f = open(1, 'r', encoding='latin-1')
+                    # Ignores piped text  e.g cat foo | grump bar
+                """
+                self.f = io.open(sys.stdin.fileno(), 'r', encoding='latin-1')
             else:
                 self.f = open(fname, 'r', encoding='latin-1')
             self.strings = strings
@@ -68,7 +63,7 @@ class Grump:
             # if we're at the end of the file
             if not line:
                 break
-            if (not re.search(r'^\s*$', line) ):
+            if not re.search(r'^\s*$', line):
                 return line
         return False
 
@@ -83,7 +78,8 @@ class Grump:
             END_MATCH = '\033[0m'
         num_matches = 0
         for str in self.strings:
-            reg = re.compile(rf'\b({str})\b', flags) if self.word else re.compile(rf'({str})', flags)
+            reg = re.compile(rf'\b({str})\b', flags) \
+                if self.word else re.compile(rf'({str})', flags)
             blob, num = reg.subn(rf'{START_MATCH}\1{END_MATCH}', blob, count=0)
             if num == 0:
                 return {'matches': 0, 'blob': blob}
@@ -109,21 +105,25 @@ class Grump:
                 return count_match['blob']
 
 
-# parser.add_argument('-word', action='store_true')
 def get_params() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog=os.path.basename(__file__),
         description='Grep for unstructured multiline paragraphs'
     )
-    parser.add_argument('-w', '--word',
+    parser.add_argument(
+        '-w', '--word',
         action='store_true',
         dest='word',
-        help='only match whole words')
-    parser.add_argument('-c', '--case-sensitive',
+        help='only match whole words'
+    )
+    parser.add_argument(
+        '-c', '--case-sensitive',
         action='store_true',
         dest='case_sensitive',
-        help='Perform case sensitive matching. By default, grump is case insensitive.')
-    parser.add_argument('-f', '--file',
+        help='match case sensitively'
+    )
+    parser.add_argument(
+        '-f', '--file',
         action='store',
         type=str,
         required=False,
@@ -131,7 +131,8 @@ def get_params() -> argparse.ArgumentParser:
         metavar='FILENAME',
         help='the file to grep (default: STDIN)'
     )
-    parser.add_argument('string',
+    parser.add_argument(
+        'string',
         action='store',
         metavar='regex',
         nargs='+',
@@ -142,12 +143,15 @@ def get_params() -> argparse.ArgumentParser:
 
 def main() -> None:
     params = get_params()
-    with Grump(params.file, params.string, case_sensitive=params.case_sensitive, word=params.word) as g:
+    with Grump(
+        params.file,
+        params.string,
+        case_sensitive=params.case_sensitive,
+        word=params.word
+    ) as g:
         for blob in g:
-            print (blob)
+            print(blob)
 
 
 if __name__ == '__main__':
     main()
-
-
