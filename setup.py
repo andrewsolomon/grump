@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="grump",
-    version="0.0.5",
+    version="0.0.6",
     author="Andrew Solomon",
     author_email="andrew@geekuni.com",
     description="Grep for Unstructured Multiline Paragraphs",
@@ -17,6 +17,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
+        "Development Status :: 3 - Alpha",
     ],
     python_requires='>=3.8',
     entry_points={
