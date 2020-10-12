@@ -71,15 +71,39 @@ with grump.Grump(
 
 ## Contributing
 
-Fork the repository, make some changes, update `tests.py` then run:
+Fork the repository, make some changes, update `tests/test_grump.py` then run:
 
 ```
-pip install black
-black grump.py
-black tests.py
+black grump/grump.py
+black tests/tests_grump.py
+pytest
 ```
 and if it passes, make a pull request.
 
+## Releasing
+
+Give it a new version:
+```
+bumpversion --current-version 0.0.1 [major|minor|patch] setup.py grump/grump.py grump/__init__.py
+```
+
+Package it:
+```
+python setup.py clean --all
+python setup.py sdist bdist_wheel
+```
+
+Upload it to test pypi:
+```
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+```
+
+or to the real pypi:
+
+
+
 ## References
 
-* [Publishing a CLI on PyPI](https://levelup.gitconnected.com/how-to-publish-a-python-command-line-application-to-pypi-5b97a6d586f1)
+* [Packaging Projects](https://packaging.python.org/tutorials/packaging-projects/)
+* [How to Publish an Open-Source Python Package to PyPI](https://realpython.com/pypi-publish-python-package/)
+

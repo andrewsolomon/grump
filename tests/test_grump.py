@@ -14,7 +14,7 @@ import grump
 class TestGrump(unittest.TestCase):
     def setUp(self):
         self.testdata_file = (
-            os.path.dirname(os.path.abspath(__file__)) + "/testdata.txt"
+            os.path.dirname(os.path.abspath(__file__)) + "/data.txt"
         )
 
     def test_default_attrs(self):
