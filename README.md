@@ -114,9 +114,3 @@ Then upload it to pypi.org
 ```
     twine upload dist/*
 ```
-
-## References
-
-* [Packaging Projects](https://packaging.python.org/tutorials/packaging-projects/)
-* [How to Publish an Open-Source Python Package to PyPI](https://realpython.com/pypi-publish-python-package/)
-
