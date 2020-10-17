@@ -1,53 +1,5 @@
 #!/usr/bin/env python3
 
-"""Grep for Unstructured Multiline Paragraphs
-
-A *multiline paragraph* is a string in which there are no 'empty
-lines' - two newlines separated only by whitespace.
-
-`grump` takes a file and a list of strings. It then outputs all
-multiline paragraphs of the file containing every string in the
-list.
-
-`grump` can also be imported as a module.
-
-Examples
---------
-
-From the CLI::
-
-    grump -f testdata.txt amy fred
-    grump amy fred < testdata.txt
-    cat testdata.txt | grump amy fred
-    grump --file testdata.txt amy fred --word --case-sensitive
-    grump -f testdata.txt amy fred -w -c
-    grump -f testdata.txt amy 'f.*d' -w -c
-
-
-As a module::
-
-    import grump
-
-    # with text from textfile.txt
-    with grump.Grump('textfile.txt', ('amy','fred')) as matches:
-        for p in matches:
-            print(p)
-
-    # with text from STDIN - replace filename with None
-    with grump.Grump(None, ('amy','fred')) as matches:
-        for p in matches:
-            print(p)
-
-    # with non-default matching rules
-    with grump.Grump(
-            'textfile.txt',
-            ('amy','fred'),
-            case_sensitive=True,
-            word=True
-        ) as matches:
-
-"""
-
 __version__ = "0.0.7"
 
 import argparse
@@ -58,7 +10,32 @@ import sys
 
 
 class Grump:
-    """An iterator for finding grump-matching paragraphs"""
+    """An iterator for finding grump-matching multiline paragraphs
+
+    A *multiline paragraph* is a string in which there are no 'empty
+    lines' - two newlines separated only by whitespace.
+
+        import grump
+
+        # with text from textfile.txt
+        with grump.Grump('textfile.txt', ('amy','fred')) as matches:
+            for p in matches:
+                print(p)
+
+        # with text from STDIN - replace filename with None
+        with grump.Grump(None, ('amy','fred')) as matches:
+            for p in matches:
+                print(p)
+
+        # with non-default matching rules
+        with grump.Grump(
+                'textfile.txt',
+                ('amy','fred'),
+                case_sensitive=True,
+                word=True
+            ) as matches:
+
+    """
 
     def __init__(self, fname, strings, case_sensitive=False, word=False):
         """
