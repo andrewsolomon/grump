@@ -60,7 +60,6 @@ import sys
 class Grump:
     """An iterator for finding grump-matching paragraphs"""
 
-
     def __init__(self, fname, strings, case_sensitive=False, word=False):
         """
         Parameters
@@ -77,7 +76,6 @@ class Grump:
         word: bool
             default False
         """
-
 
         try:
             if fname is None:
@@ -118,6 +116,7 @@ class Grump:
         return False
 
     def __count_and_color_matches(self, paragraph):
+        # return the paragraph with the number of matches, and the matches highlighted
         flags = re.MULTILINE
         if not self.case_sensitive:
             flags |= re.IGNORECASE
@@ -133,7 +132,9 @@ class Grump:
                 if self.word
                 else re.compile(rf"({str})", flags)
             )
-            paragraph, num = reg.subn(rf"{START_MATCH}\1{END_MATCH}", paragraph, count=0)
+            paragraph, num = reg.subn(
+                rf"{START_MATCH}\1{END_MATCH}", paragraph, count=0
+            )
             if num == 0:
                 return {"matches": 0, "paragraph": paragraph}
             num_matches += num

@@ -18,6 +18,8 @@ setuptools.setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Development Status :: 3 - Alpha",
+        "Intended Audience :: System Administrators",
+        "Intended Audience :: Developers",
     ],
     python_requires='>=3.8',
     entry_points={

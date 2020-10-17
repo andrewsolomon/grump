@@ -71,20 +71,24 @@ As a module
 
 ## Contributing
 
-Fork the repository, make some changes, update `tests/test_grump.py` then run:
-
+* Fork the repository https://github.com/andrewsolomon/grump
+* Make some changes
+* Update `tests/test_grump.py`
+* Make sure tests pass
 ```
     black grump/grump.py
-    black tests/tests_grump.py
+    black tests/test_grump.py
     pytest
 ```
-and if it passes, make a pull request.
+* Make a pull request
 
 ## Releasing
 
 Give it a new version:
 ```
-    bumpversion --current-version 0.0.1 [major|minor|patch] setup.py grump/grump.py grump/__init__.py
+    bump2version major # when there are backward incompatible changes
+    bump2version minor # for new backward-compatible features
+    bump2version patch # bug fixes and improvements
 ```
 
 Package it:
@@ -99,7 +103,6 @@ Upload it to test pypi:
     twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 ```
 
-
 install it from there:
 
 ```
@@ -110,11 +113,6 @@ Then upload it to pypi.org
 ```
     twine upload dist/*
 ```
-
-## FIXME
-
-* Get pydoc working
-
 
 ## References
 
