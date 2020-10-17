@@ -2,11 +2,35 @@
 
 Grep for Unstructured Multiline Paragraphs
 
-A *multiline paragraph* is a string in which there are no
-'empty lines' - two newlines separated only by whitespace.
+A *multiline paragraph* is a string in which there are no 'empty
+lines' - two newlines separated only by whitespace. For example
+given `data.txt`:
 
-Grump takes a file and a list of strings and outputs all multiline paragraphs
-of this file containing each string in the list.
+```
+    This is
+    one multiline
+    paragraph.
+
+    This is
+    another
+    multiline
+    paragraph.
+
+    This one is too!
+```
+
+`grump` takes a file and a list of strings and outputs all multiline
+paragraphs of this file containing each string in the list. For
+example:
+
+```
+    $ grump -f data.txt this one
+    This is
+    one multiline
+    paragraph.
+
+    This one is too!
+```
 
 ## Installation
 
