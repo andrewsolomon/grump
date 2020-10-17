@@ -89,7 +89,12 @@ Give it a new version:
     bump2version --no-commit --no-tag patch
 ```
 
-and remove `--no-commit` and `--no-tag` when you're sure.
+and remove `--no-commit` and `--no-tag` when you're sure. Then
+
+```
+    git push
+    git push --tags
+```
 
 Note, "patch" indicates a bugfix or minor improvement.
 
@@ -111,7 +116,7 @@ Upload it to test pypi:
 install it from there:
 
 ```
-    python3 -m pip install -i https://test.pypi.org/simple/ grump
+    python3 -m pip install --upgrade -i https://test.pypi.org/simple/ grump
 ```
 
 Then upload it to pypi.org
