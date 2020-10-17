@@ -96,16 +96,6 @@ class Grump:
             print(f"Error: File {fname} not found")
             sys.exit(2)
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        if exc_type:
-            print(f"exc_type: {exc_type}")
-            print(f"exc_value: {exc_value}")
-            print(f"exc_traceback: {exc_traceback}")
-        self.f.close()
-
     def __get_first_nonempty_line(self):
         while True:
             line = self.f.readline()
@@ -157,6 +147,17 @@ class Grump:
             count_match = self.__count_and_color_matches(paragraph)
             if count_match["matches"] > 0:
                 return count_match["paragraph"]
+
+    #  methods for enabling 'with' usage
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        if exc_type:
+            print(f"exc_type: {exc_type}")
+            print(f"exc_value: {exc_value}")
+            print(f"exc_traceback: {exc_traceback}")
+        self.f.close()
 
 
 def get_params() -> argparse.ArgumentParser:
