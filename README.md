@@ -17,7 +17,7 @@ of this file containing each string in the list.
 ## Usage
 
 ```
-    usage: grump.py [-h] [-w] [-c] [-f FILENAME] regex [regex ...]
+    usage: grump [-h] [-w] [-c] [-f FILENAME] regex [regex ...]
 
     Grep for unstructured multiline paragraphs
 
