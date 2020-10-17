@@ -86,10 +86,11 @@ As a module
 
 Give it a new version:
 ```
-    bump2version major # when there are backward incompatible changes
-    bump2version minor # for new backward-compatible features
-    bump2version patch # bug fixes and improvements
+    bump2version --no-commit major # when there are backward incompatible changes
+    bump2version --no-commit minor # for new backward-compatible features
+    bump2version --no-commit patch # bug fixes and improvements
 ```
+and remove `--no-commit` when you're sure.
 
 Package it:
 ```
