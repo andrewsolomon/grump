@@ -1,5 +1,53 @@
 #!/usr/bin/env python3
 
+"""Grep for Unstructured Multiline Paragraphs
+
+A *multiline paragraph* is a string in which there are no 'empty
+lines' - two newlines separated only by whitespace.
+
+`grump` takes a file and a list of strings. It then outputs all
+multiline paragraphs of the file containing every string in the
+list.
+
+`grump` can also be imported as a module.
+
+Examples
+--------
+
+From the CLI::
+
+    grump -f testdata.txt amy fred
+    grump amy fred < testdata.txt
+    cat testdata.txt | grump amy fred
+    grump --file testdata.txt amy fred --word --case-sensitive
+    grump -f testdata.txt amy fred -w -c
+    grump -f testdata.txt amy 'f.*d' -w -c
+
+
+As a module::
+
+    import grump
+
+    # with text from textfile.txt
+    with grump.Grump('textfile.txt', ('amy','fred')) as matches:
+        for p in matches:
+            print(p)
+
+    # with text from STDIN - replace filename with None
+    with grump.Grump(None, ('amy','fred')) as matches:
+        for p in matches:
+            print(p)
+
+    # with non-default matching rules
+    with grump.Grump(
+            'textfile.txt',
+            ('amy','fred'),
+            case_sensitive=True,
+            word=True
+        ) as matches:
+
+"""
+
 __version__ = "0.0.6"
 
 import argparse
@@ -10,36 +58,29 @@ import sys
 
 
 class Grump:
+    """An iterator for finding grump-matching paragraphs"""
 
-    """
-    Note: using context manager as a class to ensure the file handle is
-    closed at the end
-    https://book.pythontips.com/en/latest/context_managers.html
-    """
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        if exc_type:
-            print(f"exc_type: {exc_type}")
-            print(f"exc_value: {exc_value}")
-            print(f"exc_traceback: {exc_traceback}")
-        self.f.close()
 
     def __init__(self, fname, strings, case_sensitive=False, word=False):
         """
-        latin-1 so it doesn't die while reading the file...
-        http://python-notes.curiousefficiency.org/en/latest/python3/text_file_processing.html#files-in-an-ascii-compatible-encoding-best-effort-is-acceptable
+        Parameters
+        ----------
+        fname: str, optional
+            Name of the file to be parsed, or None for STDIN
+
+        strings: list[str]
+            list (or tuple) of strings or regular expressions
+
+        case_sensitive: bool
+            default False
+
+        word: bool
+            default False
         """
+
 
         try:
             if fname is None:
-                """
-                self.f = sys.stdin # Chokes on funny characters
-                self.f = open(1, 'r', encoding='latin-1')
-                    # Ignores piped text  e.g cat foo | grump bar
-                """
                 self.f = io.open(sys.stdin.fileno(), "r", encoding="latin-1")
             else:
                 self.f = open(fname, "r", encoding="latin-1")
@@ -57,17 +98,26 @@ class Grump:
             print(f"Error: File {fname} not found")
             sys.exit(2)
 
-    def get_first_nonempty_line(self):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        if exc_type:
+            print(f"exc_type: {exc_type}")
+            print(f"exc_value: {exc_value}")
+            print(f"exc_traceback: {exc_traceback}")
+        self.f.close()
+
+    def __get_first_nonempty_line(self):
         while True:
             line = self.f.readline()
-            # if we're at the end of the file
             if not line:
                 break
             if not re.search(r"^\s*$", line):
                 return line
         return False
 
-    def count_and_color_matches(self, blob):
+    def __count_and_color_matches(self, paragraph):
         flags = re.MULTILINE
         if not self.case_sensitive:
             flags |= re.IGNORECASE
@@ -83,29 +133,29 @@ class Grump:
                 if self.word
                 else re.compile(rf"({str})", flags)
             )
-            blob, num = reg.subn(rf"{START_MATCH}\1{END_MATCH}", blob, count=0)
+            paragraph, num = reg.subn(rf"{START_MATCH}\1{END_MATCH}", paragraph, count=0)
             if num == 0:
-                return {"matches": 0, "blob": blob}
+                return {"matches": 0, "paragraph": paragraph}
             num_matches += num
 
-        return {"matches": num_matches, "blob": blob}
+        return {"matches": num_matches, "paragraph": paragraph}
 
     def __iter__(self):
         return self
 
     def __next__(self):
         while True:
-            blob = self.get_first_nonempty_line()
-            if not blob:
+            paragraph = self.__get_first_nonempty_line()
+            if not paragraph:
                 raise StopIteration
             while True:
                 line = self.f.readline()
                 if re.search(r"^\s*$", line):
                     break
-                blob += line
-            count_match = self.count_and_color_matches(blob)
+                paragraph += line
+            count_match = self.__count_and_color_matches(paragraph)
             if count_match["matches"] > 0:
-                return count_match["blob"]
+                return count_match["paragraph"]
 
 
 def get_params() -> argparse.ArgumentParser:
@@ -151,8 +201,8 @@ def main() -> None:
         case_sensitive=params.case_sensitive,
         word=params.word,
     ) as g:
-        for blob in g:
-            print(blob)
+        for paragraph in g:
+            print(paragraph)
 
 
 if __name__ == "__main__":
