@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="grump",
-    version="0.0.6",
+    version="0.0.7",
     author="Andrew Solomon",
     author_email="andrew@geekuni.com",
     description="Grep for Unstructured Multiline Paragraphs",
