@@ -28,7 +28,7 @@ For use as a module see::
 
 """
 
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 
 from .grump import Grump
 
