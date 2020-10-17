@@ -86,11 +86,15 @@ As a module
 
 Give it a new version:
 ```
-    bump2version --no-commit major # when there are backward incompatible changes
-    bump2version --no-commit minor # for new backward-compatible features
-    bump2version --no-commit patch # bug fixes and improvements
+    bump2version --no-commit --no-tag patch
 ```
-and remove `--no-commit` when you're sure.
+
+and remove `--no-commit` and `--no-tag` when you're sure.
+
+Note, "patch" indicates a bugfix or minor improvement.
+
+* If there are new, backward compatible features change "patch" to "minor"
+* If there are *backward incompatible* changes change "patch" to "major"
 
 Package it:
 ```
